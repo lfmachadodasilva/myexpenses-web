@@ -1,0 +1,20 @@
+<h1>Groups</h1>
+<mat-card>
+  <mat-spinner *ngIf="isLoading" strokeWidth=5 diameter=25></mat-spinner>
+  <mat-list role="list" *ngIf="!isLoading">
+    <mat-list-item role="listitem" *ngFor="let group of groups">
+        <h2 class="title-field">{{group.name}}</h2>
+        <small class="user-field" *ngFor="let user of group.users">{{getDisplayName(user)}}</small>
+        <button mat-icon-button><mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon></button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="onEdit(group)">Edit</button>
+          <button mat-menu-item (click)="onDuplicate(group)">Duplicate</button>
+          <button mat-menu-item (click)="onDelete(group)">Delete</button>
+        </mat-menu>
+    </mat-list-item>
+  </mat-list>
+</mat-card>
+
+<div>
+  <button mat-button color="primary" (click)="onClickReload()">Reload</button>
+</div>

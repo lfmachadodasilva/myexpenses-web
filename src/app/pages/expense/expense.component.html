@@ -1,0 +1,52 @@
+<app-search></app-search>
+
+<h1>Expenses</h1>
+<mat-card>
+  <mat-spinner *ngIf="isLoading" strokeWidth=5 diameter=25></mat-spinner>
+  <mat-list role="list" *ngIf="!isLoading">
+    <mat-tab-group>
+      <mat-tab label="Summary">
+        <p>Total incoming: {{totalIcoming | currency}}</p><br>
+        <p>Total outcoming: {{totalOutcoming | currency}}</p><br>
+        <p>Total left: {{totalLeft | currency}} - {{totalLeftPerc | percent}}</p><br>
+      </mat-tab>
+      <mat-tab label="Incoming"> 
+        <div *ngFor="let obj of objsIncoming">
+          <mat-list-item role="listitem" >
+              <h2 class="title-field">{{obj.name}}</h2>
+              <small class="value-field">{{obj.value | currency }}</small>
+              <small class="value-field">{{obj.date | date:"dd/MM/yy" }}</small>
+              <small class="value-field">{{obj.label.name }}</small>
+              <button mat-icon-button><mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon></button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="onEdit(obj)">Edit</button>
+                <button mat-menu-item (click)="onDuplicate(obj)">Duplicate</button>
+                <button mat-menu-item (click)="onDelete(obj)">Delete</button>
+              </mat-menu>
+          </mat-list-item>
+        </div>
+      </mat-tab>
+      <mat-tab label="Outcoming">
+        <div *ngFor="let obj of objsOutcoming">
+          <mat-list-item role="listitem" >
+              <h2 class="title-field">{{obj.name}}</h2>
+              <small class="value-field">{{obj.value | currency }}</small>
+              <small class="value-field">{{obj.date | date:"dd/MM/yy" }}</small>
+              <small class="value-field">{{obj.label.name }}</small>
+              <button mat-icon-button><mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon></button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="onEdit(obj)">Edit</button>
+                <button mat-menu-item (click)="onDuplicate(obj)">Duplicate</button>
+                <button mat-menu-item (click)="onDelete(obj)">Delete</button>
+              </mat-menu>
+          </mat-list-item>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+    
+  </mat-list>
+</mat-card>
+
+<div>
+  <button mat-button color="primary" (click)="onClickReload()">Reload</button>
+</div>

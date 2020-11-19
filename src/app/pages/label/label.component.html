@@ -1,0 +1,27 @@
+<app-search></app-search>
+
+<h1>Labels</h1>
+<mat-card>
+  <mat-spinner *ngIf="isLoading" strokeWidth=5 diameter=25></mat-spinner>
+  <mat-list role="list" *ngIf="!isLoading">
+    <div *ngFor="let obj of objs">
+      <mat-list-item role="listitem" >
+          <h2 class="title-field">{{obj.name}}</h2>
+          <small class="value-field">{{obj.currValue | currency }}</small>
+          <small class="value-field">{{obj.lastValue | currency }}</small>
+          <small class="value-field">{{obj.avgValue | currency }}</small>
+          <button mat-icon-button><mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon></button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onEdit(obj)">Edit</button>
+            <button mat-menu-item (click)="onDuplicate(obj)">Duplicate</button>
+            <button mat-menu-item (click)="onDelete(obj)">Delete</button>
+          </mat-menu>
+      </mat-list-item>
+    </div>
+  </mat-list>
+</mat-card>
+
+<div>
+  <button mat-button color="primary" (click)="onClickReload()">Reload</button>
+</div>
+

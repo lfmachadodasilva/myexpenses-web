@@ -1,0 +1,27 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <!-- <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+      <mat-icon>menu</mat-icon>
+    </button> -->
+    <span>My App</span>
+    <span class="example-spacer"></span>
+    
+    <span class="example-spacer"></span>
+    <button *ngIf="!user" mat-icon-button class="example-icon" aria-label="Example icon-button with facebook icon" (click)="onClickFacebook()">
+      <mat-icon>facebook</mat-icon>
+    </button>
+    <button *ngIf="user" mat-button [matMenuTriggerFor]="menu">{{getUserDisplayName()}}</button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onLogout()">Logout</button>
+    </mat-menu>
+  </mat-toolbar-row>
+  <mat-toolbar-row>
+    <div>
+      <button mat-button color="primary" (click)="navigateToHome()">Home</button>
+      <button mat-button color="primary" (click)="navigateToGroup()">Group</button>
+      <button mat-button color="primary" (click)="navigateToLabel()">Label</button>
+      <button mat-button color="primary" (click)="navigateToExpense()">Expense</button>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
+
