@@ -49,3 +49,17 @@ jobs:
           ACCESS_TOKEN: "${{ secrets.ACCESS_TOKEN }}"
           BRANCH: gh-pages
           FOLDER: dist/my-app
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+      - name: Deploy to heroku (dev) 🚀
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_PASSWORD }}
+        run: |
+          wget -qO- https://cli-assets.heroku.com/install.sh | sh
+          echo "${{ secrets.HEROKU_PASSWORD }}" | docker login -u "${{ secrets.HEROKU_USERNAME }}" --password-stdin registry.heroku.com
+          heroku container:push web --app ${{ secrets.HEROKU_APP_NAME }}
+          heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
