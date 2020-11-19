@@ -5,7 +5,7 @@
     </button> -->
     <span>My App</span>
     <span class="example-spacer"></span>
-    
+
     <span class="example-spacer"></span>
     <button *ngIf="!user" mat-icon-button class="example-icon" aria-label="Example icon-button with facebook icon" (click)="onClickFacebook()">
       <mat-icon>facebook</mat-icon>
@@ -17,10 +17,10 @@
   </mat-toolbar-row>
   <mat-toolbar-row>
     <div>
-      <button mat-button color="primary" (click)="navigateToHome()">Home</button>
-      <button mat-button color="primary" (click)="navigateToGroup()">Group</button>
-      <button mat-button color="primary" (click)="navigateToLabel()">Label</button>
-      <button mat-button color="primary" (click)="navigateToExpense()">Expense</button>
+      <button mat-button (click)="navigateToHome()">Home</button>
+      <button mat-button (click)="navigateToGroup()">Group</button>
+      <button mat-button (click)="navigateToLabel()">Label</button>
+      <button mat-button (click)="navigateToExpense()">Expense</button>
     </div>
   </mat-toolbar-row>
 </mat-toolbar>

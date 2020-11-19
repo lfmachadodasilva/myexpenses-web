@@ -15,10 +15,14 @@ export class LabelComponent implements OnInit {
 
   private reload(force: boolean) {
     this.isLoading = true;
-    this.labelService.getAllFullAsync(force, 20, 10, 2020).then((value) => {
-      this.objs = value;
-      this.isLoading = false;
-    });
+    this.labelService
+      .getAllFullAsync(force, 20, 10, 2020)
+      .then((value) => {
+        this.objs = value;
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
   }
 
   async ngOnInit() {

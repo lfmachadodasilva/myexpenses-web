@@ -17,8 +17,14 @@ export class SearchComponent implements OnInit {
 
   async ngOnInit() {
     this.isLoadingGroups = true;
-    // this.groups = await this.groupService.getAll2(false);
-    this.isLoadingGroups = false;
+    this.groupService
+      .getAllAsync(false)
+      .then((value) => {
+        this.groups = value;
+      })
+      .finally(() => {
+        this.isLoadingGroups = false;
+      });
   }
 
   onSearch() {}

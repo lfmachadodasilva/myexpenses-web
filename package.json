@@ -1,11 +1,12 @@
 {
-  "homepage": "https://lfmachadodasilva.github.io/myexpenses-web",
-  "name": "my-app",
-  "version": "0.0.0",
+  "name": "myexpenses",
+  "version": "0.1.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --open --ssl true --port 3000",
-    "build": "ng build",
+    "start": "ng serve --open --ssl true",
+    "build": "ng build --prod",
+    "build:github": "ng build --prod --base-href --base-href https://lfmachadodasilva.github.io/myexpenses-web/ && mv dist/my-app/index.html dist/my-app/404.html",
+    "deploy:firebase": "npm run build && firebase deploy",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

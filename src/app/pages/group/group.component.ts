@@ -21,10 +21,14 @@ export class GroupComponent implements OnInit {
 
   private reload(force: boolean) {
     this.isLoading = false;
-    this.groupService.getAllFullAsync(force).then((value) => {
-      this.groups = value;
-      this.isLoading = false;
-    });
+    this.groupService
+      .getAllFullAsync(force)
+      .then((value) => {
+        this.groups = value;
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
   }
 
   async ngOnInit() {

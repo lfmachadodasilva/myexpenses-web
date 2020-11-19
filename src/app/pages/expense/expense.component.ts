@@ -21,27 +21,34 @@ export class ExpenseComponent implements OnInit {
 
   private reload(force: boolean) {
     this.isLoading = true;
-    this.service.getAllFullAsync(force, 20, 10, 2020).then((value) => {
-      this.objsIncoming = value.filter((x) => x.type === ExpenseType.Incoming);
-      this.objsOutcoming = value.filter(
-        (x) => x.type === ExpenseType.Outcoming
-      );
+    this.service
+      .getAllFullAsync(force, 20, 10, 2020)
+      .then((value) => {
+        this.objsIncoming = value.filter(
+          (x) => x.type === ExpenseType.Incoming
+        );
+        this.objsOutcoming = value.filter(
+          (x) => x.type === ExpenseType.Outcoming
+        );
 
-      this.totalIcoming = this.objsIncoming.reduce(
-        (sum, current) => sum + current.value,
-        0
-      );
-      this.totalOutcoming = this.objsOutcoming.reduce(
-        (sum, current) => sum + current.value,
-        0
-      );
-      this.totalLeft = this.totalIcoming - this.totalOutcoming;
+        this.totalIcoming = this.objsIncoming.reduce(
+          (sum, current) => sum + current.value,
+          0
+        );
+        this.totalOutcoming = this.objsOutcoming.reduce(
+          (sum, current) => sum + current.value,
+          0
+        );
+        this.totalLeft = this.totalIcoming - this.totalOutcoming;
 
-      this.totalLeftPerc =
-        this.totalIcoming === 0 ? 0 : this.totalLeft / this.totalIcoming;
+        this.totalLeftPerc =
+          this.totalIcoming === 0 ? 0 : this.totalLeft / this.totalIcoming;
 
-      this.isLoading = false;
-    });
+        this.isLoading = false;
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
   }
 
   async ngOnInit() {
