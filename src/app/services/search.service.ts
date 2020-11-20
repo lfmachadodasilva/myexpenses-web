@@ -10,12 +10,16 @@ import { GroupService } from './group.service';
   providedIn: 'root',
 })
 export class SearchService {
-  searchObs: Observable<SearchModel>;
+  readonly searchObs: Observable<SearchModel>;
   isLoading = false;
 
-  private selectedGroup: GroupModel;
-  private selectedMonth: number = new Date().getMonth();
-  private selectedYear: number = new Date().getFullYear();
+  groups: GroupModel[] = [];
+  months: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  years: number[] = [];
+
+  selectedGroup: GroupModel;
+  selectedMonth: number = new Date().getMonth();
+  selectedYear: number = new Date().getFullYear();
 
   constructor(
     private router: Router,
@@ -138,8 +142,8 @@ export class SearchService {
     let groups: GroupModel[] = [];
     let years: number[] = [];
 
-    groups = await this.loadGroups(force);
-    years = await this.loadYears(force);
+    this.groups = await this.loadGroups(force);
+    this.years = await this.loadYears(force);
 
     return [groups, years];
   }
@@ -151,39 +155,32 @@ export class SearchService {
         if (event instanceof NavigationEnd) {
           this.load(false)
             .then((data) => {
-              sub = this.processQueryParams(
-                data[0] as GroupModel[],
-                data[1] as number[],
-                obs
-              );
+              sub = this.processQueryParams(obs);
             })
             .catch(() => {
               // TODO
+              console.log('ERROR');
               this.isLoading = false;
             });
         }
       },
       () => {
         if (sub) {
-          sub.unsubscribe();
+          // sub.unsubscribe();
         }
       }
     );
   }
 
-  private processQueryParams(
-    groups: GroupModel[],
-    years: number[],
-    obs: Subscriber<SearchModel>
-  ) {
+  private processQueryParams(obs: Subscriber<SearchModel>) {
     return this.activatedRoute.queryParamMap.subscribe((query) => {
       const group = query.get('group');
       const month = query.get('month');
       const year = query.get('year');
 
-      this.processGroup(group, groups);
+      this.processGroup(group, this.groups);
       this.processMonth(month);
-      this.processYear(year, years);
+      this.processYear(year, this.years);
 
       this.router
         .navigate([window.location.pathname], {
@@ -196,19 +193,29 @@ export class SearchService {
         .then(() => {
           obs.next({
             group: this.selectedGroup.id,
-            groups: groups,
+            groups: this.groups,
             month: this.selectedMonth,
             months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             year: this.selectedYear,
-            years: years.length === 0 ? [this.selectedYear] : years,
+            years: this.years.length === 0 ? [this.selectedYear] : this.years,
           });
+          console.log('push: ', {
+            group: this.selectedGroup.id,
+            groups: this.groups,
+            month: this.selectedMonth,
+            months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            year: this.selectedYear,
+            years: this.years.length === 0 ? [this.selectedYear] : this.years,
+          });
+          // obs.complete();
           this.isLoading = false;
         });
     });
   }
 
   private processGroup(group: string, groups: GroupModel[]) {
-    const lastGroup = localStorage.getItem('group') as string;
+    const lastGroup = localStorage.getItem('group');
+
     if (group && groups.some((x) => x.id === +group)) {
       this.selectedGroup = groups.find((x) => x.id === +group) as GroupModel;
     } else if (lastGroup && groups.some((x) => x.id === +lastGroup)) {
@@ -223,7 +230,10 @@ export class SearchService {
       // setLoading(false);
       // return undefined;
     }
-    localStorage.setItem('group', this.selectedGroup.toString());
+    console.log(lastGroup, group, groups, this.selectedGroup);
+    if (this.selectedGroup) {
+      localStorage.setItem('group', this.selectedGroup.id.toString());
+    }
   }
 
   private processMonth(month: string) {

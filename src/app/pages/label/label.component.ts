@@ -33,6 +33,7 @@ export class LabelComponent implements OnInit, OnDestroy {
   }
 
   private reload(force: boolean) {
+    console.log('reload labels with', this.group, this.month, this.year);
     this.isLoading = true;
     this.labelService
       .getAllFullAsync(force, this.group, this.month, this.year)

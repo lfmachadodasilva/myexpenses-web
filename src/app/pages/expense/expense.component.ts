@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ExpenseFullModel, ExpenseType } from 'src/app/models/expense.model';
 import { ExpenseService } from 'src/app/services/expense.service';
+import { SearchService } from 'src/app/services/search.service';
 
 @Component({
   selector: 'app-expense',
@@ -17,7 +19,23 @@ export class ExpenseComponent implements OnInit {
   totalLeft: number;
   totalLeftPerc: number;
 
-  constructor(private service: ExpenseService) {}
+  sub: Subscription;
+
+  group: number;
+  month: number;
+  year: number;
+
+  constructor(
+    private service: ExpenseService,
+    private searchService: SearchService
+  ) {
+    this.sub = this.searchService.searchObs.subscribe((data) => {
+      this.group = data.group;
+      this.month = data.month;
+      this.year = data.year;
+      this.reload(true);
+    });
+  }
 
   private reload(force: boolean) {
     this.isLoading = true;

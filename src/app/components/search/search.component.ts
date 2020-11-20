@@ -29,24 +29,33 @@ export class SearchComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private searchService: SearchService) {
     console.log('before sub');
     this.sub = this.searchService.searchObs.subscribe((data) => {
-      this.searchData = data;
+      // this.searchData = data;
 
-      this.groups = data.groups;
-      this.months = data.months;
-      this.years = data.years;
+      // this.groups = data.groups;
+      // this.months = data.months;
+      // this.years = data.years;
 
-      this.groupModel = data.groups.find((x) => x.id === data.group);
-      this.group = data.group.toString();
-      this.month = data.month.toString();
-      this.year = data.year.toString();
+      // this.groupModel = data.groups.find((x) => x.id === data.group);
+      // this.group = data.group.toString();
+      // this.month = data.month.toString();
+      // this.year = data.year.toString();
 
-      console.log('after sub', data);
+      // console.log('after sub', data);
+      this.fill();
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('ngOnInit', this.groups, this.searchService);
 
-  ngOnDestroy() {}
+    this.fill();
+  }
+
+  ngOnDestroy() {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
+  }
 
   onSearch() {
     this.router.navigate([window.location.pathname], {
@@ -56,5 +65,21 @@ export class SearchComponent implements OnInit, OnDestroy {
         year: this.year,
       },
     });
+  }
+
+  private fill() {
+    this.groups = this.searchService.groups;
+    this.months = this.searchService.months;
+    this.years = this.searchService.years;
+
+    if (this.searchService.selectedGroup) {
+      this.groupModel = this.searchService.groups.find(
+        (x) => x.id === this.searchService.selectedGroup.id
+      );
+      this.group = this.searchService.selectedGroup.id.toString();
+    }
+
+    this.month = this.searchService.selectedMonth.toString();
+    this.year = this.searchService.selectedYear.toString();
   }
 }
