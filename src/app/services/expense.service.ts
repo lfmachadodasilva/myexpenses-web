@@ -8,8 +8,10 @@ import { ExpenseFullModel, ExpenseModel } from '../models/expense.model';
 })
 export class ExpenseService {
   private path = 'expense';
+  private pathYear = 'expense/years';
   private pathFull = 'expense/full';
 
+  private years: number[] = null;
   private objs: ExpenseModel[] = null;
   private objsFull: ExpenseFullModel[] = null;
 
@@ -42,5 +44,13 @@ export class ExpenseService {
     }
 
     return this.objsFull;
+  }
+
+  async getYearsAsync(forceRefresh: boolean = false): Promise<number[]> {
+    if (!this.years || forceRefresh) {
+      this.years = await this.http.get<number[]>(this.pathYear).toPromise();
+    }
+
+    return this.years;
   }
 }

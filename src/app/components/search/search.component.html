@@ -5,28 +5,28 @@
         Search
       </mat-panel-title>
       <mat-panel-description>
-        group | month | year
+        {{groupModel ? groupModel.name : ""}} | {{month}} | {{year}}
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <mat-spinner *ngIf="isLoadingGroups" strokeWidth=5 diameter=25></mat-spinner>
-    <mat-form-field appearance="fill" *ngIf="!isLoadingGroups">
+    <mat-spinner *ngIf="isLoading" strokeWidth=5 diameter=25></mat-spinner>
+    <mat-form-field appearance="fill" *ngIf="!isLoading">
       <mat-label>Group</mat-label>
-      <mat-select >
+      <mat-select [(value)]="group">
         <mat-option *ngFor="let group of groups" value={{group.id}}>{{group.name}}</mat-option>
       </mat-select>
     </mat-form-field>
     <br>
     <mat-form-field appearance="fill">
       <mat-label>Month</mat-label>
-      <mat-select>
-        <mat-option value="option">Option</mat-option>
+      <mat-select [(value)]="month">
+        <mat-option *ngFor="let month of months" value={{month}}>{{month}}</mat-option>
       </mat-select>
     </mat-form-field>
     <br>
     <mat-form-field appearance="fill">
       <mat-label>Year</mat-label>
-      <mat-select>
-        <mat-option value="option">Option</mat-option>
+      <mat-select [(value)]="year">
+        <mat-option *ngFor="let year of years" value={{year}}>{{year}}</mat-option>
       </mat-select>
     </mat-form-field>
     <br>
